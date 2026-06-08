@@ -1,0 +1,32 @@
+<?php
+require_once __DIR__ . '/../../models/conexion.php';
+require_once __DIR__ . '/../../models/Suelos/cc_model.php';
+
+$conexion = new Conexion();
+$conn = $conexion->conectar();
+
+$resultado = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $peso_caja         = (float) $_POST['peso_caja'];
+    $peso_caja_mhumeda = (float) $_POST['peso_caja_mhumeda'];
+    $peso_caja_mseca   = (float) $_POST['peso_caja_mseca'];
+    $no_caja           = (string)$_POST['no_caja'];
+    $control           = (float) $_POST['control'];
+
+    // Cálculos
+    $psh           = $peso_caja_mhumeda - $peso_caja;
+    $pss           = $peso_caja_mseca   - $peso_caja;
+    $porcentaje_cc = ($pss != 0) ? (($psh - $pss) / $pss) * 100 : 0;
+
+    $resultado = guardarCC($peso_caja, $peso_caja_mhumeda, $peso_caja_mseca, $psh, $pss, $porcentaje_cc, 
+    $no_caja, $control);
+
+    // Pasar valores calculados a la vista
+    $resultado['psh']           = $psh;
+    $resultado['pss']           = $pss;
+    $resultado['porcentaje_cc'] = $porcentaje_cc;
+}
+
+require_once __DIR__ . '/../../view/Suelos/cc_view.php';
+?>
