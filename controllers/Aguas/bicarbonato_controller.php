@@ -1,10 +1,15 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('aguas.bicarbonato');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Aguas/bicarbonato_model.php';
 
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $ml_acl = (float) $_POST['ml_acl'];
 
     //Cálculos a realizar

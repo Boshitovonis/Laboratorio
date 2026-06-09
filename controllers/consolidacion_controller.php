@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/../includes/auth.php';
+lab_require_permission('laboratorio.consolidacion.ver');
+
 require_once __DIR__ . '/../models/consolidacion_model.php';
 
 $tiposMuestra = listarTiposMuestraConsolidacion();

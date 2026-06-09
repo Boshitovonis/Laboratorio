@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('cana.humedad');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Cana/humedad_model.php';
 
@@ -8,6 +11,8 @@ $conn = $conexion->conectar();
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $no_bandeja   = (float) $_POST['no_bandeja'];
     $peso_bandeja = (float) $_POST['peso_bandeja'];
     $peso_muestra = (float) $_POST['peso_muestra'];

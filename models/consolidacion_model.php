@@ -2,8 +2,7 @@
 
 require_once __DIR__ . '/conexion.php';
 
-$conexionConsolidacion = new Conexion();
-$connConsolidacion = $conexionConsolidacion->conectar();
+$connConsolidacion = Conexion::conectar();
 
 function listarTiposMuestraConsolidacion()
 {
@@ -15,7 +14,7 @@ function listarTiposMuestraConsolidacion()
           ORDER BY nombre"
     );
 
-    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+    return $res ? $res->fetchAll(PDO::FETCH_ASSOC) : [];
 }
 
 function obtenerTipoMuestraConsolidacion($idTipo)
@@ -28,10 +27,9 @@ function obtenerTipoMuestraConsolidacion($idTipo)
           WHERE id_tipo = ?
           LIMIT 1"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
+    $stmt->execute([$idTipo]);
 
-    return $stmt->get_result()->fetch_assoc();
+    return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 }
 
 function obtenerAnalisisConsolidacion($idTipo)
@@ -44,9 +42,8 @@ function obtenerAnalisisConsolidacion($idTipo)
           WHERE id_tipo_muestra = ?
           ORDER BY nombre"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
-    $analisis = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->execute([$idTipo]);
+    $analisis = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (!empty($analisis)) {
         return $analisis;
@@ -80,10 +77,9 @@ function obtenerFilasConsolidacion($idTipo)
         WHERE s.id_tipo = ?
         ORDER BY s.fecha_ingreso DESC, s.id_solicitud DESC, lr.inicio ASC"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
+    $stmt->execute([$idTipo]);
 
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function obtenerEstadosAnalisisConsolidacion($idTipo, array $filas)
@@ -115,9 +111,8 @@ function obtenerEstadosAnalisisConsolidacion($idTipo, array $filas)
            INNER JOIN solicitud s ON s.id_solicitud = sa.id_solicitud
           WHERE s.id_tipo = ?"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
-    $solicitados = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->execute([$idTipo]);
+    $solicitados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($solicitados as $solicitado) {
         $idSolicitud = (int) $solicitado['id_solicitud'];
@@ -140,9 +135,8 @@ function obtenerEstadosAnalisisConsolidacion($idTipo, array $filas)
            INNER JOIN solicitud s ON s.id_lote = l.id_lote
           WHERE s.id_tipo = ?"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
-    $analisisLote = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->execute([$idTipo]);
+    $analisisLote = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($analisisLote as $item) {
         registrarEstadoConsolidacion(
@@ -164,9 +158,8 @@ function obtenerEstadosAnalisisConsolidacion($idTipo, array $filas)
            LEFT JOIN estado_formulario ef ON ef.id_estado = f.id_estado
           WHERE s.id_tipo = ?"
     );
-    $stmt->bind_param('i', $idTipo);
-    $stmt->execute();
-    $formularios = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stmt->execute([$idTipo]);
+    $formularios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($formularios as $formulario) {
         registrarEstadoConsolidacion(

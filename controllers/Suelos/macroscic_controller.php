@@ -1,10 +1,15 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('suelos.macroscic');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Suelos/macroscic_model.php';
 
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $peso    = (float) $_POST['peso'] ?? 0;
     $ppm_ca  = (float) $_POST['ppm_ca'] ?? 0;
     $ppm_mg  = (float) $_POST['ppm_mg'] ?? 0;

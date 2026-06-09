@@ -1,6 +1,9 @@
 <?php
+require_once __DIR__ . '/includes/auth.php';
 
-require_once 'conexion.php';
+lab_require_permission('laboratorio.lotes.ver');
+
+require_once '../conexion.php';
 
 $stmt = $conexion->prepare("
     SELECT *
@@ -21,7 +24,7 @@ $lotes = $stmt->fetchAll();
 <meta charset="UTF-8">
 <title>Listado de Lotes</title>
 
-<link rel="stylesheet" href="css/listar_lotes.css">
+<link rel="stylesheet" href="../css/listar_lotes.css">
 
 </head>
 

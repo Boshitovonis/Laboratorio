@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('foliares.fosforo');
+
 require_once __DIR__ . '/../../models/Foliares/fosforo_model.php';
 require_once __DIR__ . '/../../models/conexion.php';
 
@@ -9,6 +12,8 @@ $conn = $conexion->conectar();
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
 
     // DATOS PRINCIPALES
     $peso        = (float) $_POST['peso'];

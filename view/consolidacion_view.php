@@ -1,4 +1,15 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../models/consolidacion_model.php';
+lab_require_permission('laboratorio.consolidacion.ver');
+
+$tiposMuestra = $tiposMuestra ?? [];
+$tipoSeleccionado = $tipoSeleccionado ?? null;
+$tipoActual = $tipoActual ?? null;
+$analisis = $analisis ?? [];
+$filas = $filas ?? [];
+$estados = $estados ?? [];
+
 function eConsolidacion($value)
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');

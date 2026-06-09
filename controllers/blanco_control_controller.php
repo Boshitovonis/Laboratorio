@@ -1,10 +1,17 @@
 <?php
 
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../models/blanco_control_model.php';
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 $seccion = $_POST['seccion'] ?? $_GET['seccion'] ?? 'blanco';
 $seccion = in_array($seccion, ['blanco', 'control'], true) ? $seccion : 'blanco';
+
+if (in_array($action, ['save', 'delete'], true)) {
+    lab_require_permission('laboratorio.blanco_control.gestionar');
+} else {
+    lab_require_permission('laboratorio.blanco_control.ver');
+}
 
 function postValue($primary, $fallback = null) {
     if (isset($_POST[$primary])) {

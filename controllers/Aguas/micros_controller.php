@@ -1,10 +1,15 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('aguas.micros');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Aguas/micros_model.php';
 
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $conc_cu = (float) $_POST['conc_cu'];
     $conc_zn = (float) $_POST['conc_zn'];
     $conc_fe = (float) $_POST['conc_fe'];

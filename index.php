@@ -1,3 +1,18 @@
+<?php
+require_once __DIR__ . '/includes/auth.php';
+
+lab_require_module_access();
+
+$canSolicitudes = lab_can_any([
+    'laboratorio.solicitudes.ver',
+    'laboratorio.solicitudes.crear',
+    'laboratorio.solicitudes.editar',
+]);
+$canAnalisis = lab_can('laboratorio.analisis.ver');
+$canConsolidacion = lab_can('laboratorio.consolidacion.ver');
+$canLotes = lab_can('laboratorio.lotes.ver');
+$canBlancoControl = lab_can('laboratorio.blanco_control.ver');
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,50 +38,64 @@
     <!-- MENU -->
     <ul class="menu">
 
-        <li>
-            <a href="usuarios.php">
-                <i class="fas fa-user"></i>
-                <span>Usuarios</span>
-            </a>
-        </li>
+        <?php if (lab_can('laboratorio.usuarios.gestionar') && is_file(__DIR__ . '/usuarios.php')): ?>
+            <li>
+                <a href="usuarios.php">
+                    <i class="fas fa-user"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
+        <?php endif; ?>
 
-        <li>
-            <a href="menu_solicitud.php">
-                <i class="fas fa-file-signature"></i>
-                <span>Solicitud</span>
-            </a>
-        </li>
-        <li>
-            <a href="muestras.php">
-                <i class="fas fa-vial"></i>
-                <span>Muestras</span>
-            </a>
-        </li>
-        <li>
-            <a href="listar_lotes.php">
-                <i class="fas fa-box"></i>
-                <span>Lotes</span>
-            </a>
-        </li>
+        <?php if ($canSolicitudes): ?>
+            <li>
+                <a href="view/menu_solicitud.php">
+                    <i class="fas fa-file-signature"></i>
+                    <span>Solicitud</span>
+                </a>
+            </li>
+        <?php endif; ?>
 
-        <li>
-            <a href="index.html">
-                <i class="fas fa-flask-vial"></i>
-                <span>LABC</span>
-            </a>
-        </li>
+        <?php if (is_file(__DIR__ . '/muestras.php') && lab_can('laboratorio.muestras.ver')): ?>
+            <li>
+                <a href="muestras.php">
+                    <i class="fas fa-vial"></i>
+                    <span>Muestras</span>
+                </a>
+            </li>
+        <?php endif; ?>
 
-        <li>
-            <a href="controllers/consolidacion_controller.php">
-                <i class="fas fa-eye"></i>
-                <span>Vista</span>
-            </a>
-        </li>
+        <?php if ($canLotes): ?>
+            <li>
+                <a href="view/listar_lotes.php">
+                    <i class="fas fa-box"></i>
+                    <span>Lotes</span>
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($canAnalisis || $canBlancoControl || $canConsolidacion): ?>
+            <li>
+                <a href="view/labc_index.php">
+                    <i class="fas fa-flask-vial"></i>
+                    <span>LABC</span>
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($canConsolidacion): ?>
+            <li>
+                <a href="view/consolidacion_view.php">
+                    <i class="fas fa-eye"></i>
+                    <span>Vista</span>
+                </a>
+            </li>
+        <?php endif; ?>
 
     </ul>
 
     <!-- LOGOUT -->
-    <a href="logout.php" class="logout-btn">
+    <a href="<?= htmlspecialchars(lab_logout_url(), ENT_QUOTES, 'UTF-8') ?>" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i>
         <span>Cerrar sesion</span>
     </a>

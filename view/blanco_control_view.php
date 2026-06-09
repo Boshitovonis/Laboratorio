@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../includes/auth.php';
+lab_require_permission('laboratorio.blanco_control.ver');
+
 require_once __DIR__ . '/../models/blanco_control_model.php';
 
 $seccion = $_GET['seccion'] ?? 'blanco';
@@ -15,6 +18,7 @@ $editingBlanco = $seccion === 'blanco' ? $editing : null;
 $editingControl = $seccion === 'control' ? $editing : null;
 $blancos = listarBlancos();
 $controles = listarControles();
+$canManageBlancoControl = lab_can('laboratorio.blanco_control.gestionar');
 
 function e($value) {
     return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
@@ -57,6 +61,7 @@ function activoTexto($value) {
         <div class="alerta error">Completa los campos obligatorios de la seccion que estas guardando.</div>
     <?php endif; ?>
 
+    <?php if ($canManageBlancoControl): ?>
     <section class="bc-form-grid" aria-label="Formularios de blanco y control">
         <article class="bc-panel <?= $seccion === 'blanco' ? 'is-active' : '' ?>">
             <div class="bc-panel-head">
@@ -174,6 +179,7 @@ function activoTexto($value) {
             </form>
         </article>
     </section>
+    <?php endif; ?>
 
     <section class="bc-table-panel" aria-labelledby="tabla-blancos">
         <div class="bc-table-head">
@@ -190,12 +196,14 @@ function activoTexto($value) {
                         <th>Descripcion</th>
                         <th>Valor</th>
                         <th>Activo</th>
-                        <th>Accion</th>
+                        <?php if ($canManageBlancoControl): ?>
+                            <th>Accion</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($blancos)): ?>
-                        <tr><td colspan="8" class="bc-empty">No hay registros de blanco.</td></tr>
+                        <tr><td colspan="<?= $canManageBlancoControl ? 8 : 7 ?>" class="bc-empty">No hay registros de blanco.</td></tr>
                     <?php else: ?>
                         <?php foreach ($blancos as $row): ?>
                             <tr>
@@ -206,12 +214,14 @@ function activoTexto($value) {
                                 <td><?= e($row['descripcion']) ?></td>
                                 <td><?= e($row['valor']) ?></td>
                                 <td><span class="bc-status <?= (int)$row['activo'] === 1 ? 'is-on' : '' ?>"><?= activoTexto($row['activo']) ?></span></td>
-                                <td>
-                                    <div class="bc-row-actions">
-                                        <a href="?seccion=blanco&edit_id=<?= (int)$row['id_blanco'] ?>">Editar</a>
-                                        <a class="danger" href="../controllers/blanco_control_controller.php?action=delete&seccion=blanco&id=<?= (int)$row['id_blanco'] ?>" onclick="return confirm('Eliminar este registro de blanco?')">Eliminar</a>
-                                    </div>
-                                </td>
+                                <?php if ($canManageBlancoControl): ?>
+                                    <td>
+                                        <div class="bc-row-actions">
+                                            <a href="?seccion=blanco&edit_id=<?= (int)$row['id_blanco'] ?>">Editar</a>
+                                            <a class="danger" href="../controllers/blanco_control_controller.php?action=delete&seccion=blanco&id=<?= (int)$row['id_blanco'] ?>" onclick="return confirm('Eliminar este registro de blanco?')">Eliminar</a>
+                                        </div>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -237,12 +247,14 @@ function activoTexto($value) {
                         <th>Minimo</th>
                         <th>Maximo</th>
                         <th>Activo</th>
-                        <th>Accion</th>
+                        <?php if ($canManageBlancoControl): ?>
+                            <th>Accion</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($controles)): ?>
-                        <tr><td colspan="10" class="bc-empty">No hay registros de control.</td></tr>
+                        <tr><td colspan="<?= $canManageBlancoControl ? 10 : 9 ?>" class="bc-empty">No hay registros de control.</td></tr>
                     <?php else: ?>
                         <?php foreach ($controles as $row): ?>
                             <tr>
@@ -255,12 +267,14 @@ function activoTexto($value) {
                                 <td><?= e($row['minimo']) ?></td>
                                 <td><?= e($row['maximo']) ?></td>
                                 <td><span class="bc-status <?= (int)$row['activo'] === 1 ? 'is-on' : '' ?>"><?= activoTexto($row['activo']) ?></span></td>
-                                <td>
-                                    <div class="bc-row-actions">
-                                        <a href="?seccion=control&edit_id=<?= (int)$row['id_control'] ?>">Editar</a>
-                                        <a class="danger" href="../controllers/blanco_control_controller.php?action=delete&seccion=control&id=<?= (int)$row['id_control'] ?>" onclick="return confirm('Eliminar este registro de control?')">Eliminar</a>
-                                    </div>
-                                </td>
+                                <?php if ($canManageBlancoControl): ?>
+                                    <td>
+                                        <div class="bc-row-actions">
+                                            <a href="?seccion=control&edit_id=<?= (int)$row['id_control'] ?>">Editar</a>
+                                            <a class="danger" href="../controllers/blanco_control_controller.php?action=delete&seccion=control&id=<?= (int)$row['id_control'] ?>" onclick="return confirm('Eliminar este registro de control?')">Eliminar</a>
+                                        </div>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

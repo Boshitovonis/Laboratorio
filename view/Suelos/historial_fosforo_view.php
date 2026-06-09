@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('suelos.fosforo');
+$historial = $historial ?? [];
+?>
 <!DOCTYPE html>
 <html lang="es">
 

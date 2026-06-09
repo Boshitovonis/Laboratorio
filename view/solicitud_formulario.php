@@ -1,12 +1,18 @@
 <?php
-require_once __DIR__ . '/conexion.php';
-require_once __DIR__ . '/includes/solicitud_formulario_helpers.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../conexion.php';
+require_once __DIR__ . '/../includes/solicitud_formulario_helpers.php';
+
+lab_require_module_access();
 
 $message = '';
 $dbWarning = '';
 $solicitudesDb = [];
 $correlativosDb = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $idSolicitudPost = !empty($_POST['id_solicitud']) ? (int) $_POST['id_solicitud'] : null;
+  lab_require_permission($idSolicitudPost ? 'laboratorio.solicitudes.editar' : 'laboratorio.solicitudes.crear');
+
   try {
     $conexion->beginTransaction();
 
@@ -21,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ingresadoPor = trim($_POST['ingresado_por'] ?? '');
     $recibidoPor = trim($_POST['recibido_por'] ?? '');
     $analisisSeleccionados = $_POST['analisis'] ?? [];
-    $idSolicitud = !empty($_POST['id_solicitud']) ? (int) $_POST['id_solicitud'] : null;
+    $idSolicitud = $idSolicitudPost;
 
     if ($codigoLote === '') {
       throw new RuntimeException('Ingrese o seleccione un número de lote.');
@@ -109,6 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  lab_require_permission('laboratorio.solicitudes.crear');
+}
+
 try {
   sincronizarCorrelativosConMuestras($conexion);
 
@@ -163,13 +173,13 @@ try {
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 </head>
 <body>
-   <link rel="stylesheet" href="css/solicitud_formulario.css?v=2">
+   <link rel="stylesheet" href="../css/solicitud_formulario.css?v=2">
 
 <!-- NAV -->
 <nav>
   <div class="nav-brand">Laboratorios AgroLab</div>
   <div class="nav-links">
-    <a class="nav-link back" href="menu_solicitud.php" title="Volver al inicio">Inicio</a>
+    <a class="nav-link back" href="../index.php" title="Volver al inicio">Inicio</a>
     <a class="nav-link back" href="menu_solicitud.php" title="Elegir otro formulario">Cambiar de Formulario</a>
     <a class="nav-link active" href="#">Análisis Nuevos</a>
   </div>

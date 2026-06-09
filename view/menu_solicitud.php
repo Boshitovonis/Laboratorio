@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/includes/auth.php';
+
+lab_require_permission('laboratorio.solicitudes.crear');
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +13,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="css/menu_solicitud.css?v=2">
+    <link rel="stylesheet" href="../css/menu_solicitud.css?v=2">
 </head>
 
 <body>
@@ -25,23 +30,23 @@
 
         <div class="btns">
 
-            <a class="btn" href="solicitud_formulario.php?tipo=suelo-fisico">
+            <a class="btn" href="view/solicitud_formulario.php?tipo=suelo-fisico">
                 🌱 Suelos
             </a>
 
-            <a class="btn" href="solicitud_formulario.php?tipo=foliares">
+            <a class="btn" href="view/solicitud_formulario.php?tipo=foliares">
                 🍃 Foliares
             </a>
 
-            <a class="btn" href="solicitud_formulario.php?tipo=cana">
+            <a class="btn" href="view/solicitud_formulario.php?tipo=cana">
                 🎋 Caña
             </a>
 
-            <a class="btn" href="solicitud_formulario.php?tipo=miel">
+            <a class="btn" href="view/solicitud_formulario.php?tipo=miel">
                 🍯 Miel
             </a>
 
-            <a class="btn" href="solicitud_formulario.php?tipo=agua">
+            <a class="btn" href="view/solicitud_formulario.php?tipo=agua">
                 💧 Agua
             </a>
 
@@ -52,7 +57,7 @@
             el formulario correspondiente con sus análisis y filtros configurados.
         </div>
 
-        <a class="btn_volver" href="index.php">
+        <a class="btn_volver" href="../index.php">
             ← Volver al inicio
         </a>
 

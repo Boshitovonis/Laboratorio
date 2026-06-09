@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('foliares.micros');
+
 $doc_elemento  = "Fósforo";
 $doc_tipo      = "Suelos";
 $doc_codigo    = "LAB-FS-042";

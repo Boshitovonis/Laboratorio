@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_permission('laboratorio.analisis.ver');
+$datos_curva = $datos_curva ?? [];
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>

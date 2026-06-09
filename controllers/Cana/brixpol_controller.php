@@ -1,10 +1,15 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('cana.brixpol');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Cana/brixpol_model.php';
 
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $brix = (float) $_POST['brix'];
     $pol = (float) $_POST['pol'];
     $peso_torta = (float) $_POST['peso_torta'];

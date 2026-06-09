@@ -1,24 +1,22 @@
 <?php
-require_once __DIR__ . '/../config/env.php';
-
 class Conexion {
+    public static function conectar() {
+        try {
+            $conn = new PDO(
+                "mysql:host=mysql-3baa13e1-cengicana1.e.aivencloud.com;port=11821;dbname=laboratorios_prueba;charset=utf8mb4",
+                "avnadmin",
+                "AVNS_TEwBa_lAauoYBxqVGh9"
+            );
 
-    public function conectar() {
-        $host = getenv('DB_HOST') ?: '127.0.0.1';
-        $port = getenv('DB_PORT') ?: '3306';
-        $name = getenv('DB_NAME') ?: 'ccpmp';
-        $user = getenv('DB_USER') ?: 'root';
-        $pass = getenv('DB_PASSWORD') ?: '';
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-        $conn = new mysqli($host, $user, $pass, $name, $port);
-
-        if ($conn->connect_error) {
-            die('Error de conexión: ' . $conn->connect_error);
+            return $conn;
+        } catch (PDOException $e) {
+            throw new RuntimeException("Error de conexión: " . $e->getMessage());
         }
-
-        $conn->set_charset('utf8');
-
-        return $conn;
     }
 }
+
+$conexion = Conexion::conectar();
 ?>

@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/../../includes/auth.php';
+lab_require_analysis_access('suelos.pmp');
+
 require_once __DIR__ . '/../../models/conexion.php';
 require_once __DIR__ . '/../../models/Suelos/pmp_model.php';
 
@@ -8,6 +11,8 @@ $conn = $conexion->conectar();
 $resultado = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    lab_require_permission('laboratorio.analisis.crear');
+
     $peso_caja         = (float) $_POST['peso_caja'];
     $peso_caja_mhumeda = (float) $_POST['peso_caja_mhumeda'];
     $peso_caja_mseca   = (float) $_POST['peso_caja_mseca'];
